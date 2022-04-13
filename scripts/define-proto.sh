@@ -10,9 +10,6 @@ THIRD_PARTY_CONFIO_PROTO_DIR="$THIRD_PARTY_PROTO_DIR/confio"
 ROOT_IBC_PROTO_DIR="./proto/ibc/ibc-go"
 IBC_PROTO_DIR="$ROOT_IBC_PROTO_DIR/proto"
 
-ROOT_LUM_PROTO_DIR="./proto/lum-network/chain"
-LUM_PROTO_DIR="$ROOT_LUM_PROTO_DIR/proto"
-
 ROOT_RIZON_PROTO_DIR="./proto/rizon-world/rizon"
 RIZON_PROTO_DIR="$ROOT_RIZON_PROTO_DIR/proto"
 
@@ -26,7 +23,6 @@ protoc \
     --proto_path="$COSMOS_PROTO_DIR" \
     --proto_path="$THIRD_PARTY_CONFIO_PROTO_DIR" \
     --proto_path="$THIRD_PARTY_PROTO_DIR" \
-    --proto_path="$LUM_PROTO_DIR" \
     --proto_path="$RIZON_PROTO_DIR" \
     --proto_path="$IBC_PROTO_DIR" \
     --ts_proto_opt="esModuleInterop=true,forceLong=long,useOptionals=true" \
@@ -105,12 +101,6 @@ protoc \
     "$THIRD_PARTY_PROTO_DIR/tendermint/types/evidence.proto" \
     "$THIRD_PARTY_PROTO_DIR/tendermint/types/block.proto" \
     "$THIRD_PARTY_PROTO_DIR/tendermint/version/types.proto" \
-    "$LUM_PROTO_DIR/airdrop/claim.proto" \
-    "$LUM_PROTO_DIR/airdrop/query.proto" \
-    "$LUM_PROTO_DIR/airdrop/params.proto" \
-    "$LUM_PROTO_DIR/beam/beam.proto" \
-    "$LUM_PROTO_DIR/beam/query.proto" \
-    "$LUM_PROTO_DIR/beam/tx.proto" \
     "$RIZON_PROTO_DIR/tokenswap/tx.proto" \
     "$RIZON_PROTO_DIR/tokenswap/tokenswap.proto" \
     "$RIZON_PROTO_DIR/tokenswap/query.proto" \

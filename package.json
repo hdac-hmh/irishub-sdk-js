@@ -34,8 +34,9 @@
         "lint": "eslint '**/*.{ts,js}'",
         "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,json,md,html,yml}'",
         "bump": "npm version",
-        "preget-proto": "rm -rf proto",
-        "get-proto": "COSMOS_REF=v0.44.5 IBC_REF=v2.0.2 LUM_REF=v1.0.4 RIZON_REF=v0.3.0 sh ./scripts/get-proto.sh",
+		"set-proto": "yarn clean-proto && yarn get-proto && yarn define-proto && yarn postdefine-proto",
+        "clean-proto": "rm -rf proto",
+        "get-proto": "COSMOS_REF=v0.44.5 IBC_REF=v2.0.2 RIZON_REF=v0.3.0 sh ./scripts/get-proto.sh",
         "define-proto": "sh ./scripts/define-proto.sh",
         "postdefine-proto": "prettier --write \"src/codec/**/*.ts\""
     },

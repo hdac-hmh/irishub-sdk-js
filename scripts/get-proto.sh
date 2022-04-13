@@ -48,28 +48,6 @@ mv "$IBC_SDK_DIR-$IBC_SUFFIX" "$IBC_SDK_DIR"
 rm "$IBC_ZIP_FILE"
 
 ##
-## LUM SDK
-##
-
-LUM_DIR="$PROTO_DIR/lum-network"
-LUM_SDK_DIR="$LUM_DIR/chain"
-LUM_ZIP_FILE="$LUM_DIR/tmp.zip"
-
-# Init LUM REF
-LUM_REF=${LUM_REF:-"master"}
-LUM_SUFFIX=${LUM_REF//[\/]/-}
-[[ $LUM_SUFFIX =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]] && LUM_SUFFIX=${LUM_SUFFIX#v}
-
-# Create the LUM dir
-mkdir -p "$LUM_DIR"
-
-# Download the beam archive
-wget -O "$LUM_ZIP_FILE" "https://github.com/lum-network/chain/archive/$LUM_REF.zip" "--no-check-certificate"
-unzip "$LUM_ZIP_FILE" "*.proto" -d "$LUM_DIR"
-mv "$LUM_SDK_DIR-$LUM_SUFFIX" "$LUM_SDK_DIR"
-rm "$LUM_ZIP_FILE"
-
-##
 ## RIZON SDK
 ##
 
