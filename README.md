@@ -1,22 +1,18 @@
-# Lum Network - Javascript SDK
-
-[![npm version](https://badge.fury.io/js/%40lum-network%2Fsdk-javascript.svg)](https://badge.fury.io/js/%40lum-network%2Fsdk-javascript)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
-This Javascript SDK enables browsers and NodeJS clients to interact with the Lum Network.
+# RIZON - Javascript SDK
+This Javascript SDK enables browsers and NodeJS clients to interact with the RIZON.
 
 ## SDK Usage
 
 ### Node version
 
-The library is tested using **NodeJS 10.x, 12.x, 14.x, 15.x**.
+The library is tested using **NodeJS 14.x,
 
 It should also work in all recent browsers.
 
 ### Installation
 
 ```bash
-yarn add @lum-network/sdk-javascript
+yarn build
 ```
 
 ### Documentation
@@ -32,7 +28,7 @@ The [Documentation](./docs/README.md) contains:
 
 ## SDK Features
 
-This SDK provides an easy access to all the available Lum Network blockchain RPCs as well as the payload generation and the cryptographic features to properly consume those RPCs.
+This SDK provides an easy access to all the available RIZON blockchain RPCs as well as the payload generation and the cryptographic features to properly consume those RPCs.
 
 **Most commonly used features:**
 
@@ -47,13 +43,13 @@ This SDK provides an easy access to all the available Lum Network blockchain RPC
 -   Client service:
     -   Connection to a blockchain node (http and socket mode)
     -   Commonly used Tendermint and Cosmos RPCs
-    -   All Lum Network dedicated RPCs
+    -   All RIZON dedicated RPCs
     -   Transaction broadcast
 -   Transactions
     -   Payload generation
     -   Signature
 -   Messages & Types:
-    -   Cosmos & Lum messages payload building
+    -   Cosmos messages payload building
     -   Typescript implementation of RPCs requests and responses
 -   Other utils:
     -   Encoding data from/to: Uint8Array, base64 and hex
@@ -70,23 +66,16 @@ Therefore all codecs, types, functions are features from the CosmJS SDK are eith
 
 Directly importing the CosmJS SDK or other cryptographic library should be considered bad practice for most use cases.
 
-Do not hesitate to contribute to this repository. This SDK is intended to be a one-stop-shop for all Lum Network javascript implementations and should definitely be improved over time by all its users.
+Do not hesitate to contribute to this repository. This SDK is intended to be a one-stop-shop for all RIZON javascript implementations and should definitely be improved over time by all its users.
 
-### Unittests
-
-#### All unittests except the ones involving a Ledger device (skipped by default) can be run using the following command
-
-```bash
-yarn test
-```
 
 #### Ledger unittests
 
 In order to run the unittest involving Ledger devices you need to do the following:
 
-1. Chose which application you want to use for the tests (Cosmos or Lum)
+1. Chose which application you want to use for the tests (Cosmos or RIZON)
 2. Remove the `.skip` from all the tests your want to run in `./tests/ledger.test.ts`
-3. Connect a Ledger device and open either the Cosmos application or the Lum application
+3. Connect a Ledger device and open either the Cosmos application or the Rizon application
 4. Run `yarn test tests/ledger.test.ts`
 5. Follow the instructions on your Ledger device to pass each test that require a user input
 
@@ -94,22 +83,11 @@ In order to run the unittest involving Ledger devices you need to do the followi
 
 ### Introduction
 
-As of [v0.40](https://github.com/cosmos/cosmos-sdk/releases/tag/v0.40.0), the Cosmos SDK uses [protocol buffers](https://developers.google.com/protocol-buffers) as its standard serialization format for blockchain state and wire communication. This library by default supports protocol buffer serialization for many of the standard queries and messages defined by the Cosmos SDK and the Lum Network custom implementations.
+As of [v0.40](https://github.com/cosmos/cosmos-sdk/releases/tag/v0.40.0), the Cosmos SDK uses [protocol buffers](https://developers.google.com/protocol-buffers) as its standard serialization format for blockchain state and wire communication. This library by default supports protocol buffer serialization for many of the standard queries and messages defined by the Cosmos SDK implementations.
 
-### Acquire the definition files
-
-```bash
-yarn get-proto
-```
-
-### Generate codec files
+### Acquire the definition files and Generate codec files
 
 ```bash
-yarn define-proto
+yarn set-proto
 ```
 
-## Contributing
-
-Contributions are most welcome.
-
-Please test your changes with a local client and add unit tests coverage for your code before submission.
