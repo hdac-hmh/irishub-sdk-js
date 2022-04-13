@@ -55,12 +55,12 @@ RIZON_DIR="$PROTO_DIR/rizon-world"
 RIZON_SDK_DIR="$RIZON_DIR/rizon"
 RIZON_ZIP_FILE="$RIZON_DIR/tmp.zip"
 
-# Init LUM REF
+# Init RIZON REF
 RIZON_REF=${RIZON_REF:-"master"}
 RIZON_SUFFIX=${RIZON_REF//[\/]/-}
 [[ $RIZON_SUFFIX =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]] && RIZON_SUFFIX=${RIZON_SUFFIX#v}
 
-# Create the LUM dir
+# Create the RIZON dir
 mkdir -p "$RIZON_DIR"
 
 # Download the beam archive

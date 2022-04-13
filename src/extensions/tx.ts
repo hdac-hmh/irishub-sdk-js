@@ -5,7 +5,7 @@ import { SignMode } from '../codec/cosmos/tx/signing/v1beta1/signing';
 import { GetTxRequest, GetTxResponse, ServiceClientImpl, SimulateRequest, SimulateResponse } from '../codec/cosmos/tx/v1beta1/service';
 import { AuthInfo, Fee, Tx, TxBody } from '../codec/cosmos/tx/v1beta1/tx';
 import { Message } from '../messages';
-import { LumRegistry } from '../registry';
+import { RizonRegistry } from '../registry';
 import { publicKeyToProto } from '../utils';
 
 export interface TxExtension {
@@ -45,7 +45,7 @@ export function setupTxExtension(base: QueryClient): TxExtension {
                         }),
                         body: TxBody.fromPartial({
                             messages: messages.map((m) => {
-                                return { typeUrl: m.typeUrl, value: LumRegistry.encode(m) };
+                                return { typeUrl: m.typeUrl, value: RizonRegistry.encode(m) };
                             }),
                             memo: memo,
                         }),

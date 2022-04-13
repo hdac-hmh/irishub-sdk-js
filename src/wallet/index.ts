@@ -1,7 +1,7 @@
-import { LumWallet } from './LumWallet';
-import { LumPaperWallet } from './LumPaperWallet';
-import { LumLedgerWallet } from './LumLedgerWallet';
-import { LumOfflineSignerWallet } from './LumOfflineSignerWallet';
-import { LumWalletFactory } from './LumWalletFactory';
+import { RizonWallet } from './RizonWallet';
+import { RizonPaperWallet } from './RizonPaperWallet';
+import { RizonLedgerWallet } from './RizonedgerWallet';
+import { RizonOfflineSignerWallet } from './RizonOfflineSignerWallet';
+import { RizonWalletFactory } from './RizonWalletFactory';
 
-export { LumWallet, LumPaperWallet, LumLedgerWallet, LumOfflineSignerWallet, LumWalletFactory };
+export { RizonWallet, RizonPaperWallet, RizonLedgerWallet, RizonOfflineSignerWallet, RizonWalletFactory };

@@ -1,7 +1,7 @@
 import { createProtobufRpcClient, QueryClient } from '@cosmjs/stargate';
 import { assert } from '@cosmjs/utils';
 
-import { LumUtils } from '..';
+import { RizonUtils } from '..';
 import { Params } from '../codec/cosmos/mint/v1beta1/mint';
 import { QueryClientImpl } from '../codec/cosmos/mint/v1beta1/query';
 
@@ -28,13 +28,13 @@ export const setupMintExtension = (base: QueryClient): MintExtension => {
             annualProvisions: async () => {
                 const { annualProvisions } = await queryService.AnnualProvisions({});
                 assert(annualProvisions);
-                return LumUtils.fromAscii(annualProvisions);
+                return RizonUtils.fromAscii(annualProvisions);
             },
 
             inflation: async () => {
                 const { inflation } = await queryService.Inflation({});
                 assert(inflation);
-                return LumUtils.fromAscii(inflation);
+                return RizonUtils.fromAscii(inflation);
             },
         },
     };

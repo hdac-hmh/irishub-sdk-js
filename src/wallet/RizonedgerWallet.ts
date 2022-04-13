@@ -3,10 +3,10 @@ import Cosmos from '@ledgerhq/hw-app-cosmos';
 import { ExtendedSecp256k1Signature } from '@cosmjs/crypto';
 
 import { SignMode } from '../codec/cosmos/tx/signing/v1beta1/signing';
-import { LumUtils, LumTypes, LumAminoRegistry, LumConstants } from '..';
-import { LumWallet } from '.';
+import { RizonUtils, RizonTypes, RizonAminoRegistry, RizonConstants } from '..';
+import { RizonWallet } from '.';
 
-export class LumLedgerWallet extends LumWallet {
+export class RizonLedgerWallet extends RizonWallet {
     cosmosApp: Cosmos;
     private hdPath?: string;
 
@@ -39,7 +39,7 @@ export class LumLedgerWallet extends LumWallet {
         const { address, publicKey } = await this.cosmosApp.getAddress(hdPath, addressPrefix);
         this.hdPath = hdPath;
         this.address = address;
-        this.publicKey = LumUtils.fromHex(publicKey);
+        this.publicKey = RizonUtils.fromHex(publicKey);
         return true;
     };
 
@@ -47,7 +47,7 @@ export class LumLedgerWallet extends LumWallet {
         throw new Error('Feature not supported.');
     };
 
-    signTransaction = async (doc: LumTypes.Doc): Promise<[LumTypes.SignDoc, Uint8Array]> => {
+    signTransaction = async (doc: RizonTypes.Doc): Promise<[RizonTypes.SignDoc, Uint8Array]> => {
         if (!this.hdPath) {
             throw new Error('No account selected.');
         }
@@ -56,7 +56,7 @@ export class LumLedgerWallet extends LumWallet {
         // Useful doc & code:
         // sign call: https://github.com/LedgerHQ/ledgerjs/blob/master/packages/hw-app-cosmos/src/Cosmos.js
         // Expected tx format: https://github.com/cosmos/ledger-cosmos/blob/master/docs/TXSPEC.md
-        const signerIndex = LumUtils.uint8IndexOf(
+        const signerIndex = RizonUtils.uint8IndexOf(
             doc.signers.map((signer) => signer.publicKey),
             this.publicKey as Uint8Array,
         );
@@ -68,18 +68,18 @@ export class LumLedgerWallet extends LumWallet {
             'chain_id': doc.chainId,
             'fee': doc.fee,
             'memo': doc.memo,
-            'msgs': doc.messages.map((msg) => LumAminoRegistry.toAmino(msg)),
+            'msgs': doc.messages.map((msg) => RizonAminoRegistry.toAmino(msg)),
             'sequence': doc.signers[signerIndex].sequence.toString(),
         };
-        const { signature, return_code } = await this.cosmosApp.sign(this.hdPath, JSON.stringify(LumUtils.sortJSON(msg)));
+        const { signature, return_code } = await this.cosmosApp.sign(this.hdPath, JSON.stringify(RizonUtils.sortJSON(msg)));
         if (!signature || return_code === 0) {
             throw new Error(`Failed to sign message: error code ${return_code}`);
         }
         const sig = ExtendedSecp256k1Signature.fromDer(signature);
-        return [LumUtils.generateSignDoc(doc, signerIndex, this.signingMode()), new Uint8Array([...sig.r(32), ...sig.s(32)])];
+        return [RizonUtils.generateSignDoc(doc, signerIndex, this.signingMode()), new Uint8Array([...sig.r(32), ...sig.s(32)])];
     };
 
-    signMessage = async (msg: string): Promise<LumTypes.SignMsg> => {
+    signMessage = async (msg: string): Promise<RizonTypes.SignMsg> => {
         if (!this.hdPath) {
             throw new Error('No account selected.');
         }
@@ -90,13 +90,13 @@ export class LumLedgerWallet extends LumWallet {
         // that is only provided for basic message signature and verification
         const msgToSign = {
             'account_number': '0',
-            'chain_id': LumConstants.LumSignOnlyChainId,
+            'chain_id': RizonConstants.RizonSignOnlyChainId,
             'fee': {},
             'memo': msg,
             'msgs': [],
             'sequence': '0',
         };
-        const { signature, return_code } = await this.cosmosApp.sign(this.hdPath, JSON.stringify(LumUtils.sortJSON(msgToSign)));
+        const { signature, return_code } = await this.cosmosApp.sign(this.hdPath, JSON.stringify(RizonUtils.sortJSON(msgToSign)));
         if (!signature || return_code === 0) {
             throw new Error(`Failed to sign message: error code ${return_code}`);
         }
@@ -107,8 +107,8 @@ export class LumLedgerWallet extends LumWallet {
             publicKey: this.getPublicKey(),
             msg: msg,
             sig: new Uint8Array([...sig.r(32), ...sig.s(32)]),
-            version: LumConstants.LumWalletSigningVersion,
-            signer: LumConstants.LumMessageSigner.LEDGER,
+            version: RizonConstants.RizonWalletSigningVersion,
+            signer: RizonConstants.RizonMessageSigner.LEDGER,
         };
     };
 }

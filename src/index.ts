@@ -1,9 +1,9 @@
-import * as LumUtils from './utils';
-import * as LumConstants from './constants';
-import * as LumTypes from './types';
-import * as LumMessages from './messages';
-import { LumRegistry, LumAminoRegistry } from './registry';
-import { LumWallet, LumLedgerWallet, LumPaperWallet, LumWalletFactory } from './wallet';
-import { LumClient } from './client';
+import * as RizonUtils from './utils';
+import * as RizonConstants from './constants';
+import * as RizonTypes from './types';
+import * as RizonMessages from './messages';
+import { RizonRegistry, RizonAminoRegistry } from './registry';
+import { RizonWallet, RizonLedgerWallet, RizonPaperWallet, RizonWalletFactory } from './wallet';
+import { RizonClient } from './client';
 
-export { LumWallet, LumWalletFactory, LumLedgerWallet, LumPaperWallet, LumClient, LumTypes, LumUtils, LumConstants, LumMessages, LumRegistry, LumAminoRegistry };
+export { RizonWallet, RizonWalletFactory, RizonLedgerWallet, RizonPaperWallet, RizonClient, RizonTypes, RizonUtils, RizonConstants, RizonMessages, RizonRegistry, RizonAminoRegistry };

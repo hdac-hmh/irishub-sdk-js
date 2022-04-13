@@ -35,8 +35,6 @@ import { MsgCreateClient, MsgSubmitMisbehaviour, MsgUpdateClient, MsgUpgradeClie
 import { MsgConnectionOpenAck, MsgConnectionOpenConfirm, MsgConnectionOpenInit, MsgConnectionOpenTry } from '../codec/ibc/core/connection/v1/tx';
 import { MsgTransfer } from '../codec/ibc/applications/transfer/v1/tx';
 
-import { MsgClaimBeam, MsgOpenBeam, MsgUpdateBeam } from '../codec/beam/tx';
-
 const registryTypes: Iterable<[string, GeneratedType]> = [
     ['/cosmos.auth.v1beta1.BaseAccount', BaseAccount],
     ['/cosmos.auth.v1beta1.ModuleAccount', ModuleAccount],
@@ -98,9 +96,6 @@ const registryTypes: Iterable<[string, GeneratedType]> = [
     ['/ibc.core.connection.v1.MsgConnectionOpenAck', MsgConnectionOpenAck],
     ['/ibc.core.connection.v1.MsgConnectionOpenConfirm', MsgConnectionOpenConfirm],
     ['/ibc.applications.transfer.v1.MsgTransfer', MsgTransfer],
-    ['/lum.network.beam.MsgOpenBeam', MsgOpenBeam],
-    ['/lum.network.beam.MsgUpdateBeam', MsgUpdateBeam],
-    ['/lum.network.beam.MsgClaimBeam', MsgClaimBeam],
 ];
 
 class ExtendedRegistry extends Registry {
@@ -109,5 +104,5 @@ class ExtendedRegistry extends Registry {
     };
 }
 
-export const LumAminoRegistry = new AminoTypes();
-export const LumRegistry = new ExtendedRegistry(registryTypes);
+export const RizonAminoRegistry = new AminoTypes();
+export const RizonRegistry = new ExtendedRegistry(registryTypes);

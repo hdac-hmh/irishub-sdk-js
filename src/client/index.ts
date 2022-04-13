@@ -1,3 +1,3 @@
-import { LumClient } from './LumClient';
+import { RizonClient } from './RizonClient';
 
-export { LumClient };
+export { RizonClient };

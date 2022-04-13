@@ -1,5 +1,5 @@
 import { Uint64 } from '@cosmjs/math';
-import { LumConstants, LumTypes } from '..';
+import { RizonConstants, RizonTypes } from '..';
 
 const uint64ProtoToDate = (input: Long): Date => {
     return new Date(Uint64.fromString(input.toString()).toNumber() * 1000);
@@ -13,20 +13,20 @@ const uint64ProtoToDate = (input: Long): Date => {
 // lockedDelegatedCoins: Total locked coins delegated (note: this amount is confusing since it is from the time it was delegated)
 // lockedBankCoins: Total locked coins actually in "available" in the bank (note: substract this from the bank to get what an account can freely use)
 export const estimatedVesting = (
-    account: LumTypes.Account,
+    account: RizonTypes.Account,
     t?: Date,
-    denom = LumConstants.MicroLumDenom,
+    denom = RizonConstants.MicroRizonDenom,
 ): {
     startsAt: Date;
     endsAt: Date;
     time: Date;
     unlockedPercentage: number;
     lockedPercentage: number;
-    totalCoins: LumTypes.Coin;
-    unlockedCoins: LumTypes.Coin;
-    lockedCoins: LumTypes.Coin;
-    lockedDelegatedCoins: LumTypes.Coin;
-    lockedBankCoins: LumTypes.Coin;
+    totalCoins: RizonTypes.Coin;
+    unlockedCoins: RizonTypes.Coin;
+    lockedCoins: RizonTypes.Coin;
+    lockedDelegatedCoins: RizonTypes.Coin;
+    lockedBankCoins: RizonTypes.Coin;
 } => {
     if (!t) {
         t = new Date();
@@ -35,14 +35,14 @@ export const estimatedVesting = (
     if (account._continuousVestingAccount && account._continuousVestingAccount.baseVestingAccount) {
         const startsAt = uint64ProtoToDate(account._continuousVestingAccount.startTime);
         const endsAt = uint64ProtoToDate(account._continuousVestingAccount.baseVestingAccount.endTime);
-        const totalCoins: LumTypes.Coin = { amount: '0', denom: denom };
+        const totalCoins: RizonTypes.Coin = { amount: '0', denom: denom };
         for (const c of account._continuousVestingAccount.baseVestingAccount.originalVesting) {
             if (c.denom === denom) {
                 totalCoins.amount = c.amount;
                 break;
             }
         }
-        const lockedDelegatedCoins: LumTypes.Coin = { amount: '0', denom: denom };
+        const lockedDelegatedCoins: RizonTypes.Coin = { amount: '0', denom: denom };
         for (const c of account._continuousVestingAccount.baseVestingAccount.delegatedVesting) {
             if (c.denom === denom) {
                 lockedDelegatedCoins.amount = c.amount;
@@ -72,14 +72,14 @@ export const estimatedVesting = (
     } else if (account._delayedVestingAccount && account._delayedVestingAccount.baseVestingAccount) {
         const endsAt = uint64ProtoToDate(account._delayedVestingAccount.baseVestingAccount.endTime);
         const startsAt = endsAt;
-        const totalCoins: LumTypes.Coin = { amount: '0', denom: denom };
+        const totalCoins: RizonTypes.Coin = { amount: '0', denom: denom };
         for (const c of account._delayedVestingAccount.baseVestingAccount.originalVesting) {
             if (c.denom === denom) {
                 totalCoins.amount = c.amount;
                 break;
             }
         }
-        const lockedDelegatedCoins: LumTypes.Coin = { amount: '0', denom: denom };
+        const lockedDelegatedCoins: RizonTypes.Coin = { amount: '0', denom: denom };
         for (const c of account._delayedVestingAccount.baseVestingAccount.delegatedVesting) {
             if (c.denom === denom) {
                 lockedDelegatedCoins.amount = c.amount;
@@ -107,14 +107,14 @@ export const estimatedVesting = (
     } else if (account._periodicVestingAccount && account._periodicVestingAccount.baseVestingAccount) {
         const startsAt = uint64ProtoToDate(account._periodicVestingAccount.startTime);
         const endsAt = uint64ProtoToDate(account._periodicVestingAccount.baseVestingAccount.endTime);
-        const totalCoins: LumTypes.Coin = { amount: '0', denom: denom };
+        const totalCoins: RizonTypes.Coin = { amount: '0', denom: denom };
         for (const c of account._periodicVestingAccount.baseVestingAccount.originalVesting) {
             if (c.denom === denom) {
                 totalCoins.amount = c.amount;
                 break;
             }
         }
-        const lockedDelegatedCoins: LumTypes.Coin = { amount: '0', denom: denom };
+        const lockedDelegatedCoins: RizonTypes.Coin = { amount: '0', denom: denom };
         for (const c of account._periodicVestingAccount.baseVestingAccount.delegatedVesting) {
             if (c.denom === denom) {
                 lockedDelegatedCoins.amount = c.amount;

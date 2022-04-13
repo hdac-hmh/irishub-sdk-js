@@ -1,14 +1,12 @@
 import { Tendermint34Client, StatusResponse } from '@cosmjs/tendermint-rpc';
 import { QueryClient as StargateQueryClient } from '@cosmjs/stargate';
 
-import { LumWallet, LumUtils, LumTypes } from '..';
+import { RizonWallet, RizonUtils, RizonTypes } from '..';
 import {
     AuthExtension,
     setupAuthExtension,
     BankExtension,
     setupBankExtension,
-    BeamExtension,
-    setupBeamExtension,
     DistributionExtension,
     setupDistributionExtension,
     GovExtension,
@@ -19,8 +17,6 @@ import {
     setupMintExtension,
     StakingExtension,
     setupStakingExtension,
-    AirdropExtension,
-    setupAirdropExtension,
     TxExtension,
     setupTxExtension,
 } from '../extensions';
@@ -28,13 +24,12 @@ import { setupSlashingExtension, SlashingExtension } from '../extensions/slashin
 import { AuthzExtension, setupAuthzExtension } from '../extensions/authz';
 import { FeegrantExtension, setupFeegrantExtension } from '../extensions/feegrant';
 
-export class LumClient {
+export class RizonClient {
     readonly tmClient: Tendermint34Client;
     readonly queryClient: StargateQueryClient &
         AuthExtension &
         AuthzExtension &
         BankExtension &
-        BeamExtension &
         DistributionExtension &
         GovExtension &
         IbcExtension &
@@ -42,12 +37,11 @@ export class LumClient {
         StakingExtension &
         SlashingExtension &
         FeegrantExtension &
-        AirdropExtension &
         TxExtension;
     private chainId?: string;
 
     /**
-     * Create a LumClient instance using a tendermint RPC client
+     * Create a RizonClient instance using a tendermint RPC client
      *
      * @param tmClient tendermint RPC client
      */
@@ -58,7 +52,6 @@ export class LumClient {
             setupAuthExtension,
             setupAuthzExtension,
             setupBankExtension,
-            setupBeamExtension,
             setupDistributionExtension,
             setupGovExtension,
             setupIbcExtension,
@@ -66,7 +59,6 @@ export class LumClient {
             setupStakingExtension,
             setupSlashingExtension,
             setupFeegrantExtension,
-            setupAirdropExtension,
             setupTxExtension,
         );
 
@@ -87,14 +79,14 @@ export class LumClient {
     }
 
     /**
-     * Creates a new LumClient for the given endpoint
+     * Creates a new RizonClient for the given endpoint
      * Uses HTTP when the URL schema is http or https, uses WebSockets otherwise
      *
      * @param endpoint Blockchain node RPC url
      */
-    static connect = async (endpoint: string): Promise<LumClient> => {
+    static connect = async (endpoint: string): Promise<RizonClient> => {
         const tmClient = await Tendermint34Client.connect(endpoint);
-        return new LumClient(tmClient);
+        return new RizonClient(tmClient);
     };
 
     /**
@@ -155,9 +147,9 @@ export class LumClient {
      *
      * @param height block height to get (default to current height)
      */
-    getBlock = async (height?: number): Promise<LumTypes.BlockResponse> => {
+    getBlock = async (height?: number): Promise<RizonTypes.BlockResponse> => {
         const response = await this.tmClient.block(height);
-        return response as LumTypes.BlockResponse;
+        return response as RizonTypes.BlockResponse;
     };
 
     /**
@@ -165,21 +157,21 @@ export class LumClient {
      *
      * @param address wallet address
      */
-    getAccount = async (address: string): Promise<LumTypes.Account | null> => {
+    getAccount = async (address: string): Promise<RizonTypes.Account | null> => {
         const anyAccount = await this.queryClient.auth.account(address);
         if (!anyAccount) {
             return null;
         }
-        return LumUtils.accountFromAny(anyAccount);
+        return RizonUtils.accountFromAny(anyAccount);
     };
 
     /**
      * Get account balance
      *
      * @param address wallet address
-     * @param searchDenom Coin denomination (ex: lum)
+     * @param searchDenom Coin denomination (ex: rizon)
      */
-    getBalance = async (address: string, searchDenom: string): Promise<LumTypes.Coin | null> => {
+    getBalance = async (address: string, searchDenom: string): Promise<RizonTypes.Coin | null> => {
         const balance = await this.queryClient.bank.balance(address, searchDenom);
         return balance ? balance : null;
     };
@@ -189,7 +181,7 @@ export class LumClient {
      *
      * @param address wallet address
      */
-    getAllBalances = async (address: string): Promise<LumTypes.Coin[]> => {
+    getAllBalances = async (address: string): Promise<RizonTypes.Coin[]> => {
         const balances = await this.queryClient.bank.allBalances(address);
         return balances;
     };
@@ -197,9 +189,9 @@ export class LumClient {
     /**
      * Get coin supply
      *
-     * @param searchDenom Coin denomination (ex: lum)
+     * @param searchDenom Coin denomination (ex: rizon)
      */
-    getSupply = async (searchDenom: string): Promise<LumTypes.Coin | null> => {
+    getSupply = async (searchDenom: string): Promise<RizonTypes.Coin | null> => {
         const supply = await this.queryClient.bank.supplyOf(searchDenom);
         return supply ? supply : null;
     };
@@ -207,7 +199,7 @@ export class LumClient {
     /**
      * Get all coins supplies
      */
-    getAllSupplies = async (): Promise<LumTypes.Coin[]> => {
+    getAllSupplies = async (): Promise<RizonTypes.Coin[]> => {
         const supplies = await this.queryClient.bank.totalSupply();
         return supplies;
     };
@@ -218,7 +210,7 @@ export class LumClient {
      * @param hash transaction hash to retrieve
      * @param includeProof whether or not to include proof of the transaction inclusion in the block
      */
-    getTx = async (hash: Uint8Array, includeProof?: boolean): Promise<LumTypes.TxResponse | null> => {
+    getTx = async (hash: Uint8Array, includeProof?: boolean): Promise<RizonTypes.TxResponse | null> => {
         const result = await this.tmClient.tx({ hash: hash, prove: includeProof });
         return result;
     };
@@ -237,10 +229,10 @@ export class LumClient {
      * @param perPage results per pages (default to 30)
      * @param includeProof whether or not to include proofs of the transactions inclusion in the block
      */
-    searchTx = async (queries: string[], page = 1, perPage = 30, includeProof?: boolean): Promise<LumTypes.TxResponse[]> => {
+    searchTx = async (queries: string[], page = 1, perPage = 30, includeProof?: boolean): Promise<RizonTypes.TxResponse[]> => {
         const results = await Promise.all(queries.map((q) => this.txsQuery({ query: q, page: page, per_page: perPage, prove: includeProof })));
         const seenHashes: Uint8Array[] = [];
-        const uniqueResults: LumTypes.TxResponse[] = [];
+        const uniqueResults: RizonTypes.TxResponse[] = [];
         for (let r = 0; r < results.length; r++) {
             for (let t = 0; t < results[r].length; t++) {
                 const tx = results[r][t];
@@ -258,7 +250,7 @@ export class LumClient {
      *
      * @param params Search params
      */
-    private txsQuery = async (params: LumTypes.TxSearchParams): Promise<readonly LumTypes.TxResponse[]> => {
+    private txsQuery = async (params: RizonTypes.TxSearchParams): Promise<readonly RizonTypes.TxResponse[]> => {
         const results = await this.tmClient.txSearch(params);
         return results.txs;
     };
@@ -269,8 +261,8 @@ export class LumClient {
      * @param wallet signing wallet or wallets for multi signature
      * @param doc document to sign
      */
-    signTx = async (wallet: LumWallet | LumWallet[], doc: LumTypes.Doc): Promise<Uint8Array> => {
-        let wallets: LumWallet[] = [];
+    signTx = async (wallet: RizonWallet | RizonWallet[], doc: RizonTypes.Doc): Promise<Uint8Array> => {
+        let wallets: RizonWallet[] = [];
         if (Array.isArray(wallet)) {
             wallets = wallet;
         } else {
@@ -281,7 +273,7 @@ export class LumClient {
             throw new Error('At least one wallet is required to sign the transaction');
         }
 
-        let signDoc: LumTypes.SignDoc | undefined = undefined;
+        let signDoc: RizonTypes.SignDoc | undefined = undefined;
         const signatures: Uint8Array[] = [];
 
         for (let i = 0; i < wallets.length; i++) {
@@ -298,7 +290,7 @@ export class LumClient {
         if (!signDoc) {
             throw new Error('Impossible error to avoid typescript warnings');
         }
-        return LumUtils.generateTxBytes(signDoc, signatures);
+        return RizonUtils.generateTxBytes(signDoc, signatures);
     };
 
     /**
@@ -307,7 +299,7 @@ export class LumClient {
      *
      * @param tx signed transaction to broadcast
      */
-    broadcastTx = async (tx: Uint8Array): Promise<LumTypes.BroadcastTxCommitResponse> => {
+    broadcastTx = async (tx: Uint8Array): Promise<RizonTypes.BroadcastTxCommitResponse> => {
         const response = await this.tmClient.broadcastTxCommit({ tx });
         return response;
     };
@@ -318,7 +310,7 @@ export class LumClient {
      * @param wallet signing wallet or wallets for multi signature
      * @param doc document to sign and broadcast as a transaction
      */
-    signAndBroadcastTx = async (wallet: LumWallet | LumWallet[], doc: LumTypes.Doc): Promise<LumTypes.BroadcastTxCommitResponse> => {
+    signAndBroadcastTx = async (wallet: RizonWallet | RizonWallet[], doc: RizonTypes.Doc): Promise<RizonTypes.BroadcastTxCommitResponse> => {
         const signedTx = await this.signTx(wallet, doc);
         return this.broadcastTx(signedTx);
     };

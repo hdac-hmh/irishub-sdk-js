@@ -5,7 +5,7 @@ import { decodePubkey } from '@cosmjs/proto-signing';
 
 import { Any } from '../codec/google/protobuf/any';
 
-import { LumTypes } from '..';
+import { RizonTypes } from '..';
 import { BaseAccount, ModuleAccount } from '../codec/cosmos/auth/v1beta1/auth';
 import { BaseVestingAccount, ContinuousVestingAccount, DelayedVestingAccount, PeriodicVestingAccount } from '../codec/cosmos/vesting/v1beta1/vesting';
 
@@ -13,7 +13,7 @@ function uint64FromProto(input: Long) {
     return Uint64.fromString(input.toString());
 }
 
-function accountFromBaseAccount(input: BaseAccount): LumTypes.Account {
+function accountFromBaseAccount(input: BaseAccount): RizonTypes.Account {
     const { address, pubKey, accountNumber, sequence } = input;
     const pubkey = decodePubkey(pubKey);
     return {
@@ -24,7 +24,7 @@ function accountFromBaseAccount(input: BaseAccount): LumTypes.Account {
     };
 }
 
-export const accountFromAny = (input: Any): LumTypes.Account => {
+export const accountFromAny = (input: Any): RizonTypes.Account => {
     const { typeUrl, value } = input;
     switch (typeUrl) {
         case '/cosmos.auth.v1beta1.BaseAccount':

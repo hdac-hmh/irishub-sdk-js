@@ -3,15 +3,15 @@ import { Any } from '../codec/google/protobuf/any';
 import { Secp256k1, sha256, ripemd160, EnglishMnemonic, Bip39, Slip10, Slip10Curve, stringToPath, Random } from '@cosmjs/crypto';
 
 import { Bech32 } from './encoding';
-import { LumBech32PrefixAccAddr, getLumHdPath, PrivateKeyLength } from '../constants';
+import { RizonBech32PrefixAccAddr, getRizonHdPath, PrivateKeyLength } from '../constants';
 
 /**
  * Derives a bech32 wallet address from a public key (secp256k1)
  *
  * @param publicKey public key to derive the address from
- * @param prefix address prefix to use (ex: lum)
+ * @param prefix address prefix to use (ex: rizon)
  */
-export const getAddressFromPublicKey = (publicKey: Uint8Array, prefix = LumBech32PrefixAccAddr) => {
+export const getAddressFromPublicKey = (publicKey: Uint8Array, prefix = RizonBech32PrefixAccAddr) => {
     if (publicKey.length !== 33) {
         throw new Error(`Invalid Secp256k1 pubkey length (compressed): ${publicKey.length}`);
     }
@@ -49,7 +49,7 @@ export const getSeedFromMnemonic = async (mnemonic: string): Promise<Uint8Array>
  * @param seed to derive the private key from
  * @param hdPath derivation path to use
  */
-export const getPrivateKeyFromSeed = (seed: Uint8Array, hdPath = getLumHdPath(0)): Uint8Array => {
+export const getPrivateKeyFromSeed = (seed: Uint8Array, hdPath = getRizonHdPath(0)): Uint8Array => {
     const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, stringToPath(hdPath));
     return privkey;
 };
@@ -60,7 +60,7 @@ export const getPrivateKeyFromSeed = (seed: Uint8Array, hdPath = getLumHdPath(0)
  * @param mnemonic mnemonic phrase
  * @param hdPath derivation path to use
  */
-export const getPrivateKeyFromMnemonic = async (mnemonic: string, hdPath = getLumHdPath(0)): Promise<Uint8Array> => {
+export const getPrivateKeyFromMnemonic = async (mnemonic: string, hdPath = getRizonHdPath(0)): Promise<Uint8Array> => {
     const seed = await getSeedFromMnemonic(mnemonic);
     return getPrivateKeyFromSeed(seed, hdPath);
 };
@@ -78,7 +78,7 @@ export const generatePrivateKey = (): Uint8Array => {
  * @param address address to check
  * @param prefix prefix to check (will not be checked if not provided)
  */
-export const isAddressValid = (address: string, prefix: string | undefined = LumBech32PrefixAccAddr): boolean => {
+export const isAddressValid = (address: string, prefix: string | undefined = RizonBech32PrefixAccAddr): boolean => {
     try {
         const decoded = Bech32.decode(address);
         return (!prefix || prefix === decoded.prefix) && decoded.data.length === 20;

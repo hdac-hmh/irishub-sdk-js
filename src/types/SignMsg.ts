@@ -1,4 +1,4 @@
-import { LumMessageSigner } from '../constants';
+import { RizonMessageSigner } from '../constants';
 
 export interface SignMsg {
     /**
@@ -29,5 +29,5 @@ export interface SignMsg {
     /**
      * Signer wallet identifier
      */
-    signer: LumMessageSigner;
+    signer: RizonMessageSigner;
 }

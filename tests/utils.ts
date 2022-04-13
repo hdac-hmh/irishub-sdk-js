@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { LumClient, LumConstants } from '../src';
+import { RizonClient, RizonConstants } from '../src';
 
-export const requestCoinsFromFaucet = async (clt: LumClient, addr: string): Promise<void> => {
-    const ulumAmount = 100 * Math.pow(10, LumConstants.LumExponent);
+export const requestCoinsFromFaucet = async (clt: RizonClient, addr: string): Promise<void> => {
+    const ulumAmount = 100 * Math.pow(10, RizonConstants.RizonExponent);
 
     // Try to query the local faucet
     let res = null;
@@ -28,7 +28,7 @@ export const requestCoinsFromFaucet = async (clt: LumClient, addr: string): Prom
     const faucetResult = new Promise((resolve, reject) => {
         let it = 0;
         const rec = setInterval(async () => {
-            const balance = await clt.getBalance(addr, LumConstants.MicroLumDenom);
+            const balance = await clt.getBalance(addr, RizonConstants.MicroRizonDenom);
             if (balance && parseInt(balance.amount) >= ulumAmount) {
                 clearInterval(rec);
                 resolve(true);

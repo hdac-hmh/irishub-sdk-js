@@ -1,4 +1,4 @@
-import { LumWallet, LumWalletFactory, LumClient, LumUtils, LumConstants, LumRegistry, LumTypes, LumMessages } from '../src';
+import { RizonWallet, RizonWalletFactory, RizonClient, RizonUtils, RizonConstants, RizonRegistry, RizonTypes, RizonMessages } from '../src';
 import { BeamData, BeamState } from '../src/codec/beam/beam';
 import { requestCoinsFromFaucet } from './utils';
 
@@ -6,17 +6,17 @@ const randomString = (): string => {
     return Math.random().toString(36).substring(7);
 };
 
-describe('LumClient', () => {
-    let clt: LumClient;
-    let w1: LumWallet;
-    let w2: LumWallet;
+describe('RizonClient', () => {
+    let clt: RizonClient;
+    let w1: RizonWallet;
+    let w2: RizonWallet;
 
     beforeAll(async () => {
-        clt = await LumClient.connect('http://node0.testnet.lum.network/rpc');
+        clt = await RizonClient.connect('http://node0.testnet.lum.network/rpc');
 
         // Prepare the wallets
-        w1 = await LumWalletFactory.fromMnemonic(LumUtils.generateMnemonic());
-        w2 = await LumWalletFactory.fromMnemonic(LumUtils.generateMnemonic());
+        w1 = await RizonWalletFactory.fromMnemonic(RizonUtils.generateMnemonic());
+        w2 = await RizonWalletFactory.fromMnemonic(RizonUtils.generateMnemonic());
 
         expect(w1.getAddress()).not.toEqual(w2.getAddress());
 
@@ -30,32 +30,32 @@ describe('LumClient', () => {
     });
 
     it('should allow to connect via webshockets', async () => {
-        const wsClt = await LumClient.connect('wss://node0.testnet.lum.network/rpc');
+        const wsClt = await RizonClient.connect('wss://node0.testnet.lum.network/rpc');
         expect(await wsClt.status()).toBeTruthy();
         wsClt.disconnect();
     });
 
     it.only('should be able to simulate transactions', async () => {
-        const w3 = await LumWalletFactory.fromMnemonic(LumUtils.generateMnemonic());
+        const w3 = await RizonWalletFactory.fromMnemonic(RizonUtils.generateMnemonic());
         // Should reject invalid bech32 addresses
         await expect(
-            clt.queryClient.tx.simulate([LumMessages.BuildMsgSend(w1.getAddress(), 'toto', [{ denom: LumConstants.MicroLumDenom, amount: '1' }])], 'hello', w1.getPublicKey(), 0),
+            clt.queryClient.tx.simulate([RizonMessages.BuildMsgSend(w1.getAddress(), 'toto', [{ denom: RizonConstants.MicroRizonDenom, amount: '1' }])], 'hello', w1.getPublicKey(), 0),
         ).rejects.toThrow();
         // Should reject invalid signer
         await expect(
-            clt.queryClient.tx.simulate([LumMessages.BuildMsgSend(w3.getAddress(), w3.getAddress(), [{ denom: LumConstants.MicroLumDenom, amount: '1' }])], 'hello', w3.getPublicKey(), 0),
+            clt.queryClient.tx.simulate([RizonMessages.BuildMsgSend(w3.getAddress(), w3.getAddress(), [{ denom: RizonConstants.MicroRizonDenom, amount: '1' }])], 'hello', w3.getPublicKey(), 0),
         ).rejects.toThrow();
         // Should reject invalid amounts
         await expect(
-            clt.queryClient.tx.simulate([LumMessages.BuildMsgSend(w1.getAddress(), w1.getAddress(), [{ denom: LumConstants.MicroLumDenom, amount: '-1' }])], 'hello', w3.getPublicKey(), 0),
+            clt.queryClient.tx.simulate([RizonMessages.BuildMsgSend(w1.getAddress(), w1.getAddress(), [{ denom: RizonConstants.MicroRizonDenom, amount: '-1' }])], 'hello', w3.getPublicKey(), 0),
         ).rejects.toThrow();
         // Should reject invalid sequences
         await expect(
-            clt.queryClient.tx.simulate([LumMessages.BuildMsgSend(w1.getAddress(), w1.getAddress(), [{ denom: LumConstants.MicroLumDenom, amount: '1' }])], 'hello', w3.getPublicKey(), -1),
+            clt.queryClient.tx.simulate([RizonMessages.BuildMsgSend(w1.getAddress(), w1.getAddress(), [{ denom: RizonConstants.MicroRizonDenom, amount: '1' }])], 'hello', w3.getPublicKey(), -1),
         ).rejects.toThrow();
         // Should return simulation in case of success
         const res = await clt.queryClient.tx.simulate(
-            [LumMessages.BuildMsgSend(w1.getAddress(), w1.getAddress(), [{ denom: LumConstants.MicroLumDenom, amount: '1' }])],
+            [RizonMessages.BuildMsgSend(w1.getAddress(), w1.getAddress(), [{ denom: RizonConstants.MicroRizonDenom, amount: '1' }])],
             'hello',
             w3.getPublicKey(),
             0,
@@ -72,13 +72,13 @@ describe('LumClient', () => {
         expect(acc).toBeTruthy();
 
         const chainId = await clt.getChainId();
-        const amount: LumTypes.Coin = {
+        const amount: RizonTypes.Coin = {
             amount: '1',
-            denom: LumConstants.MicroLumDenom,
+            denom: RizonConstants.MicroRizonDenom,
         };
 
         const fee = {
-            amount: [{ denom: LumConstants.MicroLumDenom, amount: '1' }],
+            amount: [{ denom: RizonConstants.MicroRizonDenom, amount: '1' }],
             gas: '100000',
         };
 
@@ -88,7 +88,7 @@ describe('LumClient', () => {
             chainId,
             fee: fee,
             memo: 'Beam review transaction',
-            messages: [LumMessages.BuildMsgOpenBeam(beamId, w1.getAddress(), '', amount, 'test', 'lum-network/review', null, 0, 0)],
+            messages: [RizonMessages.BuildMsgOpenBeam(beamId, w1.getAddress(), '', amount, 'test', 'lum-network/review', null, 0, 0)],
             signers: [
                 {
                     accountNumber: acc.accountNumber,
@@ -110,7 +110,7 @@ describe('LumClient', () => {
             chainId,
             fee: fee,
             memo: 'Beam review transaction',
-            messages: [LumMessages.BuildMsgUpdateBeam(beamId, w1.getAddress(), null, BeamState.CANCELED)],
+            messages: [RizonMessages.BuildMsgUpdateBeam(beamId, w1.getAddress(), null, BeamState.CANCELED)],
             signers: [
                 {
                     accountNumber: acc.accountNumber,
@@ -136,12 +136,12 @@ describe('LumClient', () => {
 
         const chainId = await clt.getChainId();
 
-        const amount: LumTypes.Coin = {
+        const amount: RizonTypes.Coin = {
             amount: '1',
-            denom: LumConstants.MicroLumDenom,
+            denom: RizonConstants.MicroRizonDenom,
         };
 
-        const openBeamMsg = LumMessages.BuildMsgOpenBeam(
+        const openBeamMsg = RizonMessages.BuildMsgOpenBeam(
             beamId,
             w1.getAddress(),
             '',
@@ -211,7 +211,7 @@ describe('LumClient', () => {
         );
 
         const fee = {
-            amount: [{ denom: LumConstants.MicroLumDenom, amount: '1' }],
+            amount: [{ denom: RizonConstants.MicroRizonDenom, amount: '1' }],
             gas: '100000',
         };
         const doc = {
@@ -243,12 +243,12 @@ describe('LumClient', () => {
 
         const chainId = await clt.getChainId();
 
-        const amount: LumTypes.Coin = {
+        const amount: RizonTypes.Coin = {
             amount: '1',
-            denom: LumConstants.MicroLumDenom,
+            denom: RizonConstants.MicroRizonDenom,
         };
 
-        const openBeamMsg = LumMessages.BuildMsgOpenBeam(
+        const openBeamMsg = RizonMessages.BuildMsgOpenBeam(
             beamId,
             w1.getAddress(),
             '',
@@ -273,7 +273,7 @@ describe('LumClient', () => {
         );
 
         const fee = {
-            amount: [{ denom: LumConstants.MicroLumDenom, amount: '1' }],
+            amount: [{ denom: RizonConstants.MicroRizonDenom, amount: '1' }],
             gas: '100000',
         };
         const doc = {
@@ -319,7 +319,7 @@ describe('LumClient', () => {
         const supplies = await clt.queryClient.bank.totalSupply();
         expect(supplies).toBeTruthy();
         expect(supplies.length).toBeGreaterThan(0);
-        const lumSupply = supplies.filter((c) => c.denom === LumConstants.MicroLumDenom)[0];
+        const lumSupply = supplies.filter((c) => c.denom === RizonConstants.MicroRizonDenom)[0];
         expect(lumSupply).toBeTruthy();
         expect(parseFloat(lumSupply.amount)).toBeGreaterThan(0);
     });
@@ -331,7 +331,7 @@ describe('LumClient', () => {
         let found = false;
         for (let v = 0; v < validators.validators.length; v++) {
             const val = validators.validators[v];
-            if (LumUtils.toHex(val.address) === LumUtils.toHex(block.block.header.proposerAddress)) {
+            if (RizonUtils.toHex(val.address) === RizonUtils.toHex(block.block.header.proposerAddress)) {
                 found = true;
                 break;
             }
@@ -342,16 +342,16 @@ describe('LumClient', () => {
         const firstBlock = await clt.getBlock(2);
 
         // Get boot val (genesis) with address genesis proposer address
-        const bootVal = validators.validators.filter((v) => LumUtils.toHex(v.address) === LumUtils.toHex(firstBlock.block.header.proposerAddress))[0];
+        const bootVal = validators.validators.filter((v) => RizonUtils.toHex(v.address) === RizonUtils.toHex(firstBlock.block.header.proposerAddress))[0];
         expect(bootVal).toBeTruthy();
 
         // Get staking validator by matching it using pubkeys
         const stakers = await clt.queryClient.staking.validators('BOND_STATUS_BONDED');
-        const bootStak = stakers.validators.filter((s) => LumUtils.toHex((LumRegistry.decode(s.consensusPubkey) as LumTypes.PubKey).key) === LumUtils.toHex(bootVal.pubkey.data))[0];
+        const bootStak = stakers.validators.filter((s) => RizonUtils.toHex((RizonRegistry.decode(s.consensusPubkey) as RizonTypes.PubKey).key) === RizonUtils.toHex(bootVal.pubkey.data))[0];
         expect(bootVal).toBeTruthy();
 
         // Get account information by deriving the address from the operator address
-        const delegAddress = LumUtils.Bech32.encode(LumConstants.LumBech32PrefixAccAddr, LumUtils.Bech32.decode(bootStak.operatorAddress).data);
+        const delegAddress = RizonUtils.Bech32.encode(RizonConstants.RizonBech32PrefixAccAddr, RizonUtils.Bech32.decode(bootStak.operatorAddress).data);
         const account = await clt.getAccount(delegAddress);
         expect(account).toBeTruthy();
 
@@ -359,7 +359,7 @@ describe('LumClient', () => {
         const balances = await clt.getAllBalances(account.address);
         expect(balances).toBeTruthy();
         expect(balances.length).toBeGreaterThan(0);
-        const lumBalance = balances.filter((b) => b.denom === LumConstants.MicroLumDenom)[0];
+        const lumBalance = balances.filter((b) => b.denom === RizonConstants.MicroRizonDenom)[0];
         expect(lumBalance).toBeTruthy();
         expect(parseFloat(lumBalance.amount)).toBeGreaterThan(0);
     });
@@ -373,16 +373,16 @@ describe('LumClient', () => {
         const firstBlock = await clt.getBlock(2);
 
         // Get boot val (genesis) with address genesis proposer address
-        const bootVal = validators.validators.filter((v) => LumUtils.toHex(v.address) === LumUtils.toHex(firstBlock.block.header.proposerAddress))[0];
+        const bootVal = validators.validators.filter((v) => RizonUtils.toHex(v.address) === RizonUtils.toHex(firstBlock.block.header.proposerAddress))[0];
         expect(bootVal).toBeTruthy();
 
         // Get genesis validator account address
         const stakers = await clt.queryClient.staking.validators('BOND_STATUS_BONDED');
-        const bootStak = stakers.validators.filter((s) => LumUtils.toHex((LumRegistry.decode(s.consensusPubkey) as LumTypes.PubKey).key) === LumUtils.toHex(bootVal.pubkey.data))[0];
+        const bootStak = stakers.validators.filter((s) => RizonUtils.toHex((RizonRegistry.decode(s.consensusPubkey) as RizonTypes.PubKey).key) === RizonUtils.toHex(bootVal.pubkey.data))[0];
         expect(bootVal).toBeTruthy();
 
         // Get account information by deriving the address from the operator address
-        const delegAddress = LumUtils.Bech32.encode(LumConstants.LumBech32PrefixAccAddr, LumUtils.Bech32.decode(bootStak.operatorAddress).data);
+        const delegAddress = RizonUtils.Bech32.encode(RizonConstants.RizonBech32PrefixAccAddr, RizonUtils.Bech32.decode(bootStak.operatorAddress).data);
         const account = await clt.getAccount(delegAddress);
         expect(account).toBeTruthy();
 
@@ -418,7 +418,7 @@ describe('LumClient', () => {
         const acc2 = await clt.getAccount(w2.getAddress());
         const chainId = await clt.getChainId();
         const fee = {
-            amount: [{ denom: LumConstants.MicroLumDenom, amount: '1' }],
+            amount: [{ denom: RizonConstants.MicroRizonDenom, amount: '1' }],
             gas: '300000',
         };
 
@@ -428,8 +428,8 @@ describe('LumClient', () => {
             fee: fee,
             memo: 'Just a open beam transaction',
             messages: [
-                LumMessages.BuildMsgSend(w1.getAddress(), w2.getAddress(), [{ denom: LumConstants.MicroLumDenom, amount: '99' }]),
-                LumMessages.BuildMsgSend(w2.getAddress(), w1.getAddress(), [{ denom: LumConstants.MicroLumDenom, amount: '99' }]),
+                RizonMessages.BuildMsgSend(w1.getAddress(), w2.getAddress(), [{ denom: RizonConstants.MicroRizonDenom, amount: '99' }]),
+                RizonMessages.BuildMsgSend(w2.getAddress(), w1.getAddress(), [{ denom: RizonConstants.MicroRizonDenom, amount: '99' }]),
             ],
             signers: [
                 {
@@ -446,6 +446,6 @@ describe('LumClient', () => {
         };
 
         const res = await clt.signAndBroadcastTx([w1, w2], doc);
-        expect(LumUtils.broadcastTxCommitSuccess(res));
+        expect(RizonUtils.broadcastTxCommitSuccess(res));
     });
 });

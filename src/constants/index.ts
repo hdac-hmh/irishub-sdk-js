@@ -1,51 +1,51 @@
 /**
- * Lum Exponent
- * 1 lum = 10^6 ulum
+ * RIZON Exponent
+ * 1 atolo = 10^6 uatolo
  */
-export const LumExponent = 6;
+export const RizonExponent = 6;
 
 /**
- * Lum Coin denomination
+ * Coin denomination
  */
-export const LumDenom = 'lum';
+export const RizonDenom = 'atolo';
 
 /**
- * Micro Lum Coin denomination
+ * Micro Coin denomination
  */
-export const MicroLumDenom = 'ulum';
+export const MicroRizonDenom = 'uatolo';
 
 /**
- * Lum Network Bech32 prefix of an account's address
+ * Network Bech32 prefix of an account's address
  */
-export const LumBech32PrefixAccAddr = 'lum';
+export const RizonBech32PrefixAccAddr = 'rizon';
 
 /**
- * Lum Network Bech32 prefix of an account's public key
+ * Network Bech32 prefix of an account's public key
  */
-export const LumBech32PrefixAccPub = 'lumpub';
+export const RizonBech32PrefixAccPub = 'rizonpub';
 
 /**
- * Lum Network Bech32 prefix of a validator's operator address
+ * Network Bech32 prefix of a validator's operator address
  */
-export const LumBech32PrefixValAddr = 'lumvaloper';
+export const RizonBech32PrefixValAddr = 'rizonvaloper';
 
 /**
- * Lum Network Bech32 prefix of a validator's operator public key
+ * Network Bech32 prefix of a validator's operator public key
  */
-export const LumBech32PrefixValPub = 'lumvaloperpub';
+export const RizonBech32PrefixValPub = 'rizonvaloperpub';
 
 /**
- * Lum Network Bech32 prefix of a consensus node address
+ * Network Bech32 prefix of a consensus node address
  */
-export const LumBech32PrefixConsAddr = 'lumvalcons';
+export const RizonBech32PrefixConsAddr = 'rizonvalcons';
 
 /**
- * Lum Network Bech32 prefix of a consensus node public key
+ * Network Bech32 prefix of a consensus node public key
  */
-export const LumBech32PrefixConsPub = 'lumvalconspub';
+export const RizonBech32PrefixConsPub = 'rizonvalconspub';
 
 /**
- * Lum Network HDPath
+ * Network HDPath
  *
  * @see https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
  * @see https://github.com/satoshilabs/slips/blob/master/slip-0044.md
@@ -53,11 +53,11 @@ export const LumBech32PrefixConsPub = 'lumvalconspub';
 export const HDPath = "m/44'/880'/0'/";
 
 /**
- * Get a Lum Network HDPath for a specified account index
+ * Get a Network HDPath for a specified account index
  *
- * @param accountIndex appended at the end of the default Lum derivation path
+ * @param accountIndex appended at the end of the default derivation path
  */
-export const getLumHdPath = (accountIndex = 0, walletIndex = 0): string => {
+export const getRizonHdPath = (accountIndex = 0, walletIndex = 0): string => {
     return HDPath + accountIndex.toString() + '/' + walletIndex.toString();
 };
 
@@ -69,12 +69,12 @@ export const PrivateKeyLength = 32;
 /**
  * Signing version of the SDK
  */
-export const LumWalletSigningVersion = '1';
+export const RizonWalletSigningVersion = '1';
 
 /**
  * Signing wallets
  */
-export enum LumMessageSigner {
+export enum RizonMessageSigner {
     PAPER = 'lum-sdk/paper',
     LEDGER = 'lum-sdk/ledger',
     OFFLINE = 'lum-sdk/offline',
@@ -83,4 +83,4 @@ export enum LumMessageSigner {
 /**
  * Chain ID used for message signature by wallet implementations that require one
  */
-export const LumSignOnlyChainId = 'lum-signature-only';
+export const RizonSignOnlyChainId = 'titan-1';
