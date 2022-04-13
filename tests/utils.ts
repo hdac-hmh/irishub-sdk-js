@@ -3,24 +3,26 @@ import axios from 'axios';
 import { RizonClient, RizonConstants } from '../src';
 
 export const requestCoinsFromFaucet = async (clt: RizonClient, addr: string): Promise<void> => {
-    const ulumAmount = 100 * Math.pow(10, RizonConstants.RizonExponent);
+    const uatoloAmount = 1 * Math.pow(10, RizonConstants.RizonExponent);
 
     // Try to query the local faucet
     let res = null;
     try {
         res = await axios.post(
-            `http://0.0.0.0:4500/`,
-            { 'address': addr, 'coins': [`${ulumAmount}ulum`] },
+            `http://localhost:5000/faucets`,
+            { 'address': addr, 'coins': [`${uatoloAmount}uatolo`] },
             {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             },
         );
-    } catch (e) {}
+    } catch (e) {
+    }
+
     if (!res || res.status !== 200) {
         // Otherwise query the testnet official faucet
-        res = await axios.get(`https://bridge.testnet.lum.network/faucet/${addr}`);
+        res = await axios.get(`http://localhost:5000/faucet/${addr}`);
     }
     expect(res).toBeTruthy();
     expect(res.status).toEqual(200);
@@ -29,7 +31,7 @@ export const requestCoinsFromFaucet = async (clt: RizonClient, addr: string): Pr
         let it = 0;
         const rec = setInterval(async () => {
             const balance = await clt.getBalance(addr, RizonConstants.MicroRizonDenom);
-            if (balance && parseInt(balance.amount) >= ulumAmount) {
+            if (balance && parseInt(balance.amount) >= uatoloAmount) {
                 clearInterval(rec);
                 resolve(true);
             } else if (it >= 60) {

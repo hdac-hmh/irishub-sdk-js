@@ -16,16 +16,16 @@ Signing wallets
 
 ### LEDGER
 
-• **LEDGER** = `"lum-sdk/ledger"`
+• **LEDGER** = `"rizon-sdk/ledger"`
 
 ___
 
 ### OFFLINE
 
-• **OFFLINE** = `"lum-sdk/offline"`
+• **OFFLINE** = `"rizon-sdk/offline"`
 
 ___
 
 ### PAPER
 
-• **PAPER** = `"lum-sdk/paper"`
+• **PAPER** = `"rizon-sdk/paper"`

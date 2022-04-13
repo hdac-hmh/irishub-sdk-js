@@ -99,7 +99,7 @@ describe('RizonWallet', () => {
         // Create a fake document for signature verification purposes
         const doc = {
             accountNumber: 1,
-            chainId: 'lumnetwork-testnet',
+            chainId: 'groot-16',
             fee: {
                 amount: [{ denom: RizonConstants.MicroRizonDenom, amount: '1' }],
                 gas: '1',
@@ -148,7 +148,7 @@ describe('RizonWallet', () => {
     });
 
     it('Should be able to sign and verify messages', async () => {
-        const message = 'Lum network is an awesome decentralized protocol';
+        const message = 'Hello Rizon World';
 
         const privateKey = '0xb8e62c34928025cdd3aef6cbebc68694b5ad9209b2aff6d3891c8e61d22d3a3b';
         const mnemonic = 'surround miss nominee dream gap cross assault thank captain prosper drop duty group candy wealth weather scale put';

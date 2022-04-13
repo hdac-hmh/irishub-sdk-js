@@ -30,7 +30,7 @@
 
 ### HDPath
 
-• **HDPath**: ``"m/44'/880'/0'/"``
+• **HDPath**: ``"m/44'/118'/0'/"``
 
 Network HDPath
 

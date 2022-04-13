@@ -50,7 +50,7 @@ export const RizonBech32PrefixConsPub = 'rizonvalconspub';
  * @see https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
  * @see https://github.com/satoshilabs/slips/blob/master/slip-0044.md
  */
-export const HDPath = "m/44'/880'/0'/";
+export const HDPath = "m/44'/118'/0'/";
 
 /**
  * Get a Network HDPath for a specified account index
@@ -75,9 +75,9 @@ export const RizonWalletSigningVersion = '1';
  * Signing wallets
  */
 export enum RizonMessageSigner {
-    PAPER = 'lum-sdk/paper',
-    LEDGER = 'lum-sdk/ledger',
-    OFFLINE = 'lum-sdk/offline',
+    PAPER = 'rizon-sdk/paper',
+    LEDGER = 'rizon-sdk/ledger',
+    OFFLINE = 'rizon-sdk/offline',
 }
 
 /**

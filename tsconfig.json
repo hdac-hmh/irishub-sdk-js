@@ -22,7 +22,6 @@
     },
     "typedocOptions": {
         "entryPoints": ["src/index.ts"],
-        // "mode": "file",
         "out": "docs",
         "exclude": []
     },
